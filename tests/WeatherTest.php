@@ -50,8 +50,8 @@ class WeatherTest extends TestCase
                     'key' => 'mock-key',
                     'city' => '深圳',
                     'output' => 'json',
-                    'extensions' => 'base'
-                ]
+                    'extensions' => 'base',
+                ],
             ]
         )->andReturn($response);
 
@@ -74,7 +74,7 @@ class WeatherTest extends TestCase
                     'city' => '深圳',
                     'extensions' => 'base',
                     'output' => 'xml',
-                ]
+                ],
             ]
         )->andReturn($response);
 
