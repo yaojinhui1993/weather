@@ -9,6 +9,7 @@ use Yaojinhui\Weather\Exceptions\HttpException;
 class Weather
 {
     protected $key;
+
     protected $guzzleOptions = [];
 
     public function __construct($key)
@@ -18,7 +19,7 @@ class Weather
 
     public function getHttpClient()
     {
-        return new Client($this->guzzleOptions) ;
+        return new Client($this->guzzleOptions);
     }
 
     public function setGuzzleOptions(array $options)
@@ -36,11 +37,11 @@ class Weather
         ];
 
         if (!in_array(strtolower($extensions), ['live', 'forcast'])) {
-            throw new InvalidArgumentException('Invalid extensions types(live/forcast): ' . $extensions);
+            throw new InvalidArgumentException('Invalid extensions types(live/forcast): '.$extensions);
         }
 
         if (!in_array(strtolower($format), ['xml', 'json'])) {
-            throw new InvalidArgumentException('Invalid response format: ' . $format);
+            throw new InvalidArgumentException('Invalid response format: '.$format);
         }
 
         $query = array_filter([
@@ -54,7 +55,8 @@ class Weather
             $response = $this->getHttpClient()->get($url, [
                 'query' => $query,
             ])->getBody()->getContents();
-            return $format === 'json' ? json_decode($response, true) : $response;
+
+            return 'json' === $format ? json_decode($response, true) : $response;
         } catch (\Exception $e) {
             throw new HttpException($e->getMessage(), $e->getCode(), $e);
         }
