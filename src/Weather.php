@@ -9,6 +9,7 @@ use Yaojinhui\Weather\Exceptions\HttpException;
 class Weather
 {
     protected $key;
+    protected $guzzleOptions = [];
 
     public function __construct($key)
     {
@@ -34,14 +35,14 @@ class Weather
         }
 
         if (!in_array(strtolower($extensions), ['base', 'all'])) {
-            throw new InvalidArgumentException('Invalid extensions value(base/all): ' . $format);
+            throw new InvalidArgumentException('Invalid extensions value(base/all): ' . $extensions);
         }
 
         $query = array_filter([
             'key' => $this->key,
             'city' => $city,
+            'extensions' => $extensions,
             'output' => $format,
-            'extensions' => $type,
         ]);
 
         try {

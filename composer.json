@@ -8,7 +8,16 @@
             "email": "yaojinhui1993@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Yaojinhui\\Weather\\": "./src"
+        }
+    },
     "require": {
         "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.3",
+        "mockery/mockery": "^1.1"
     }
 }
