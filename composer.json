@@ -1,0 +1,14 @@
+{
+    "name": "yaojinhui1993/weather",
+    "description": "A weather SDK.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "yaojinhui",
+            "email": "yaojinhui1993@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    }
+}
