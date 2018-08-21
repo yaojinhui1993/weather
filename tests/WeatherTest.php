@@ -44,7 +44,7 @@ class WeatherTest extends TestCase
         $client = \Mockery::mock(Client::class);
 
         $client->allows()->get(
-            'http://api.map.baidu.com/telematics/v3/weather',
+            'https://restapi.amap.com/v3/weather/weatherInfo?parameters',
             [
                 'query' => [
                     'key' => 'mock-key',

@@ -28,7 +28,7 @@ class Weather
 
     public function getWeather($city, $extensions = 'base', $format = 'json')
     {
-        $url = 'http://api.map.baidu.com/telematics/v3/weather';
+        $url = 'https://restapi.amap.com/v3/weather/weatherInfo?parameters';
 
         if (!in_array(strtolower($format), ['xml', 'json'])) {
             throw new InvalidArgumentException('Invalid response format: ' . $format);
