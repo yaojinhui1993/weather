@@ -8,14 +8,11 @@ use Yaojinhui\Weather\Exceptions\HttpException;
 
 class Weather
 {
-    protected $ak;
-    protected $sn;
-    protected $guzzleOptions = [];
+    protected $key;
 
-    public function __construct(string $ak, string $sn = null)
+    public function __construct($key)
     {
-        $this->ak = $ak;
-        $this->sn = $sn;
+        $this->key = $key;
     }
 
     public function getHttpClient()
@@ -28,28 +25,32 @@ class Weather
         $this->guzzleOptions = $options;
     }
 
-    public function getWeather(string $location, string $format = 'json', string $coordType = null)
+    public function getWeather($city, $extensions = 'base', $format = 'json')
     {
         $url = 'http://api.map.baidu.com/telematics/v3/weather';
 
-        if (!\in_array($format, ['xml', 'json'])) {
+        if (!in_array(strtolower($format), ['xml', 'json'])) {
             throw new InvalidArgumentException('Invalid response format: ' . $format);
         }
+
+        if (!in_array(strtolower($extensions), ['base', 'all'])) {
+            throw new InvalidArgumentException('Invalid extensions value(base/all): ' . $format);
+        }
+
         $query = array_filter([
-            'ak' => $this->ak,
-            'sn' => $this->sn,
-            'location' => $location,
-            'coord_type' => $coordType,
+            'key' => $this->key,
+            'city' => $city,
+            'output' => $format,
+            'extensions' => $type,
         ]);
 
         try {
             $response = $this->getHttpClient()->get($url, [
                 'query' => $query,
             ])->getBody()->getContents();
+            return $format === 'json' ? json_decode($response, true) : $response;
         } catch (\Exception $e) {
             throw new HttpException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $format === 'json' ? \json_decode($response, true) : $response;
     }
 }
