@@ -3,6 +3,8 @@
 namespace Yaojinhui\Weather;
 
 use GuzzleHttp\Client;
+use Yaojinhui\Weather\Exceptions\InvalidArgumentException;
+use Yaojinhui\Weather\Exceptions\HttpException;
 
 class Weather
 {
@@ -30,6 +32,9 @@ class Weather
     {
         $url = 'http://api.map.baidu.com/telematics/v3/weather';
 
+        if (!\in_array($format, ['xml', 'json'])) {
+            throw new InvalidArgumentException('Invalid response format: ' . $format);
+        }
         $query = array_filter([
             'ak' => $this->ak,
             'sn' => $this->sn,
@@ -37,9 +42,13 @@ class Weather
             'coord_type' => $coordType,
         ]);
 
-        $response = $this->getHttpClient()->get($url, [
-            'query' => $query,
-        ])->getBody()->getContents();
+        try {
+            $response = $this->getHttpClient()->get($url, [
+                'query' => $query,
+            ])->getBody()->getContents();
+        } catch (\Exception $e) {
+            throw new HttpException($e->getMessage(), $e->getCode(), $e);
+        }
 
         return $format === 'json' ? \json_decode($response, true) : $response;
     }
