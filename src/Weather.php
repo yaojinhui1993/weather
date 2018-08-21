@@ -26,22 +26,27 @@ class Weather
         $this->guzzleOptions = $options;
     }
 
-    public function getWeather($city, $extensions = 'base', $format = 'json')
+    public function getWeather($city, $extensions = 'live', $format = 'json')
     {
         $url = 'https://restapi.amap.com/v3/weather/weatherInfo?parameters';
+
+        $extensionsTypes = [
+            'live' => 'base',
+            'forcast' => 'all',
+        ];
+
+        if (!in_array(strtolower($extensions), ['live', 'forcast'])) {
+            throw new InvalidArgumentException('Invalid extensions types(live/forcast): ' . $extensions);
+        }
 
         if (!in_array(strtolower($format), ['xml', 'json'])) {
             throw new InvalidArgumentException('Invalid response format: ' . $format);
         }
 
-        if (!in_array(strtolower($extensions), ['base', 'all'])) {
-            throw new InvalidArgumentException('Invalid extensions value(base/all): ' . $extensions);
-        }
-
         $query = array_filter([
             'key' => $this->key,
             'city' => $city,
-            'extensions' => $extensions,
+            'extensions' => $extensionsTypes[$extensions],
             'output' => $format,
         ]);
 
@@ -53,5 +58,15 @@ class Weather
         } catch (\Exception $e) {
             throw new HttpException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    public function getLiveWeather($city, $format = 'json')
+    {
+        return $this->getWeather($city, 'live', $format);
+    }
+
+    public function getForcastsWeather($city, $format = 'json')
+    {
+        return $this->getWeather($city, 'forcast', $format);
     }
 }
